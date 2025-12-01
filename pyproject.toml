@@ -1,0 +1,25 @@
+[project]
+name = "robot-arm_simulator"
+description = "A simulator for robotic arms using Python and Matplotlib."
+
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.13"
+dependencies = [
+    "numpy (>=2.3.0,<3.0.0)",
+    "matplotlib (>=3.10.7,<4.0.0)"
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/HumanoidCommonNorms/RobotArmSimulator"
+
+[tool.poetry]
+packages = [{include = "robot_arm_simulator", from = "src"}]
+
+[tool.setuptools_scm]
+write_to = "src/robot_arm_simulator/__init__.py"
+
+[build-system]
+requires = ["setuptools>=64", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
