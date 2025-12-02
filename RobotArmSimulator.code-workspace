@@ -30,7 +30,7 @@
 			"**/build": true
 		},
 		"editor.rulers": [
-			100
+			79
 		],
 		"files.exclude": {
 			"**/.git": true,

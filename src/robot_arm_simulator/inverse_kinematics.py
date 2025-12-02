@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import math as mt
 import numpy as np
 from config import RobotConfig
 
@@ -14,17 +13,15 @@ dx = RobotConfig.TARGET_POINT_X
 dy = RobotConfig.TARGET_POINT_Y
 dz = RobotConfig.TARGET_POINT_Z
 
-RAD2DEG = 180.0 / mt.pi
-
 # XY平面上の距離
-dxy = mt.sqrt(dx*dx + dy*dy)
+dxy = np.sqrt(dx*dx + dy*dy)
 
 # 目標位置までの3D距離
 pow_reach = dx*dx + dy*dy + dz*dz
-arm_reach = mt.sqrt(pow_reach)
+arm_reach = np.sqrt(pow_reach)
 
 # ベース回転角（Z軸周り）
-theta0 = mt.atan2(dy, dx)
+theta0 = np.arctan2(dy, dx)
 
 # 余弦定理で肘関節の角度を計算
 cos_theta1 = (L1*L1 + L2*L2 - pow_reach) / (2*L1*L2)
@@ -32,15 +29,15 @@ cos_theta1 = (L1*L1 + L2*L2 - pow_reach) / (2*L1*L2)
 if arm_reach > (L1+L2):
     print("Target is out of reach! Len:", arm_reach)
 elif abs(cos_theta1) > 1.0:
-    print("Target is out of reach! angle:", mt.acos(cos_theta1)* RAD2DEG)
+    print("Target is out of reach! angle:", np.degrees(np.arccos(cos_theta1)))
 else:
-    theta2 = mt.pi - mt.acos(cos_theta1)
+    theta2 = np.pi - np.arccos(cos_theta1)
 
     # 角度計算
-    alpha = mt.atan2(dz, dxy)
-    beta = mt.acos((L1 + L2*mt.cos(theta2)) / arm_reach)
-    theta1 = mt.pi/2 - (alpha + beta)
+    alpha = np.arctan2(dz, dxy)
+    beta = np.arccos((L1 + L2*np.cos(theta2)) / arm_reach)
+    theta1 = np.pi/2 - (alpha + beta)
 
-    print("theta0 = ", theta0 * RAD2DEG)
-    print("theta1 = ", theta1 * RAD2DEG)
-    print("theta2 = ", theta2 * RAD2DEG)
+    print("theta0 = ", np.degrees(theta0))
+    print("theta1 = ", np.degrees(theta1))
+    print("theta2 = ", np.degrees(theta2))

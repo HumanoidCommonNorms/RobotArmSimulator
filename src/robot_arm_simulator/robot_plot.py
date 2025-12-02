@@ -1,12 +1,10 @@
 """
-3軸ロボットアーム シミュレータ
+ロボットアーム シミュレータ
 """
 
-import math as mt
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from mpl_toolkits.mplot3d import Axes3D
 from robot_arm_simulator.config import RobotConfig
 
 # 日本語フォントの設定
@@ -119,10 +117,12 @@ class ThreeAxisRobot:
         positions = self.forward_kinematics(theta1, theta2, theta3, theta4)
 
         # リンクの色設定
-        link_colors = [RobotConfig.LINK1_COLOR, RobotConfig.LINK2_COLOR, RobotConfig.LINK3_COLOR]
+        link_colors = [RobotConfig.LINK1_COLOR,
+                       RobotConfig.LINK2_COLOR,
+                       RobotConfig.LINK3_COLOR]
         link_labels = ['Link 1 [len:' + str(RobotConfig.LINK1_LENGTH) + ' mm]',
                        'Link 2 [len:' + str(RobotConfig.LINK2_LENGTH) + ' mm]',
-                       'Link 3 [len:' + str(RobotConfig.LINK3_LENGTH)+ ' mm]']
+                       'Link 3 [len:' + str(RobotConfig.LINK3_LENGTH) + ' mm]']
 
         # リンクを描画
         for i in range(len(positions) - 1):
@@ -134,15 +134,18 @@ class ThreeAxisRobot:
             zs = [positions[i][2], positions[i+1][2]]
             color = link_colors[i-1] if i-1 < len(link_colors) else 'blue'
             label = link_labels[i-1] if i-1 < len(link_labels) else None
-            ax.plot(xs, ys, zs, '-', color=color, linewidth=3, marker='o', markersize=8, label=label)
+            ax.plot(xs, ys, zs, '-', color=color, linewidth=3,
+                    marker='o', markersize=8, label=label)
 
         # 基点を描画
-        ax.scatter([0], [0], [0], color=RobotConfig.BASE_COLOR, s=100, label='Base')
+        ax.scatter([0], [0], [0], color=RobotConfig.BASE_COLOR,
+                   s=100, label='Base')
 
         # 手先位置を描画
         end_pos = positions[-1]
         ax.scatter([end_pos[0]], [end_pos[1]], [end_pos[2]],
-                  color=RobotConfig.END_EFFECTOR_COLOR, s=100, label='End Effector')
+                   color=RobotConfig.END_EFFECTOR_COLOR, s=100,
+                   label='End Effector')
 
         # 軸の設定
         max_reach = self.link1 + self.link2 + self.link3
@@ -153,7 +156,12 @@ class ThreeAxisRobot:
         ax.set_xlabel('X [mm]')
         ax.set_ylabel('Y [mm]')
         ax.set_zlabel('Z [mm]')
-        ax.set_title(f'Robot Arm\nθ1={np.degrees(theta1):.1f}°, θ2={np.degrees(theta2):.1f}°, θ3={np.degrees(theta3):.1f}°, θ4={np.degrees(theta4):.1f}°\nEnd Effector: ({end_pos[0]:.3f}, {end_pos[1]:.3f}, {end_pos[2]:.3f})')
+        ax.set_title(
+            f'Robot Arm\n' +
+            f'θ1={np.degrees(theta1):.1f}°, θ2={np.degrees(theta2):.1f}°, ' +
+            f'θ3={np.degrees(theta3):.1f}°, θ4={np.degrees(theta4):.1f}°\n' +
+            f'End Effector: ' +
+            f'({end_pos[0]:.3f}, {end_pos[1]:.3f}, {end_pos[2]:.3f})')
         ax.legend(loc='upper left', bbox_to_anchor=(1.15, 1), borderaxespad=0)
 
         return ax
@@ -211,7 +219,9 @@ class RobotSimulator:
         else:
             plt.show()
 
-    def interactive_control(self, init_theta1=0.0, init_theta2=0.0, init_theta3=0.0, init_theta4=0.0):
+    def interactive_control(self,
+                            init_theta1=0.0, init_theta2=0.0,
+                            init_theta3=0.0, init_theta4=0.0):
         """
         インタラクティブな角度制御
         スライダーで各関節の角度を調整
@@ -225,7 +235,8 @@ class RobotSimulator:
         plt.subplots_adjust(left=0.1, right=0.85, bottom=0.30, top=0.88)
 
         # 初期状態を描画
-        self.robot.plot_robot(init_theta1, init_theta2, init_theta3, init_theta4, self.ax)
+        self.robot.plot_robot(init_theta1, init_theta2,
+                              init_theta3, init_theta4, self.ax)
 
         # スライダーとテキストボックスの作成
         slider_width = 0.55
@@ -250,21 +261,38 @@ class RobotSimulator:
         ax_text4 = plt.axes([textbox_left, 0.03, textbox_width, 0.03])
 
         # リセットボタン用
-        ax_reset = plt.axes([textbox_left + textbox_width + 0.02, 0.18, 0.08, 0.03])
+        ax_reset = plt.axes(
+            [textbox_left + textbox_width + 0.02, 0.18, 0.08, 0.03])
 
         slider_theta1 = Slider(ax_theta1, 'Base 回転',
-                              RobotConfig.THETA1_MIN_DEG, RobotConfig.THETA1_MAX_DEG, valinit=np.degrees(init_theta1), valstep=0.001)
+                               RobotConfig.THETA1_MIN_DEG,
+                               RobotConfig.THETA1_MAX_DEG,
+                               valinit=np.degrees(init_theta1),
+                               valstep=0.001)
         slider_theta2 = Slider(ax_theta2, 'Base',
-                              RobotConfig.THETA2_MIN_DEG, RobotConfig.THETA2_MAX_DEG, valinit=np.degrees(init_theta2), valstep=0.001)
+                               RobotConfig.THETA2_MIN_DEG,
+                               RobotConfig.THETA2_MAX_DEG,
+                               valinit=np.degrees(init_theta2),
+                               valstep=0.001)
         slider_theta3 = Slider(ax_theta3, 'リンク_1',
-                              RobotConfig.THETA3_MIN_DEG, RobotConfig.THETA3_MAX_DEG, valinit=np.degrees(init_theta3), valstep=0.001 )
+                               RobotConfig.THETA3_MIN_DEG,
+                               RobotConfig.THETA3_MAX_DEG,
+                               valinit=np.degrees(init_theta3),
+                               valstep=0.001)
         slider_theta4 = Slider(ax_theta4, 'リンク_2',
-                             RobotConfig.THETA4_MIN_DEG, RobotConfig.THETA4_MAX_DEG, valinit=np.degrees(init_theta4), valstep=0.001)
+                               RobotConfig.THETA4_MIN_DEG,
+                               RobotConfig.THETA4_MAX_DEG,
+                               valinit=np.degrees(init_theta4),
+                               valstep=0.001)
 
-        text_theta1 = TextBox(ax_text1, '', initial=f'{np.degrees(init_theta1):.3f}')
-        text_theta2 = TextBox(ax_text2, '', initial=f'{np.degrees(init_theta2):.3f}')
-        text_theta3 = TextBox(ax_text3, '', initial=f'{np.degrees(init_theta3):.3f}')
-        text_theta4 = TextBox(ax_text4, '', initial=f'{np.degrees(init_theta4):.3f}')
+        text_theta1 = TextBox(
+            ax_text1, '', initial=f'{np.degrees(init_theta1):.3f}')
+        text_theta2 = TextBox(
+            ax_text2, '', initial=f'{np.degrees(init_theta2):.3f}')
+        text_theta3 = TextBox(
+            ax_text3, '', initial=f'{np.degrees(init_theta3):.3f}')
+        text_theta4 = TextBox(
+            ax_text4, '', initial=f'{np.degrees(init_theta4):.3f}')
 
         # リセットボタン
         reset_button = Button(ax_reset, 'リセット')
@@ -290,7 +318,8 @@ class RobotSimulator:
             """テキストボックス1からの更新"""
             try:
                 val = float(text)
-                val = np.clip(val, RobotConfig.THETA1_MIN_DEG, RobotConfig.THETA1_MAX_DEG)
+                val = np.clip(val, RobotConfig.THETA1_MIN_DEG,
+                              RobotConfig.THETA1_MAX_DEG)
                 slider_theta1.set_val(val)
             except ValueError:
                 pass
@@ -299,7 +328,8 @@ class RobotSimulator:
             """テキストボックス2からの更新"""
             try:
                 val = float(text)
-                val = np.clip(val, RobotConfig.THETA2_MIN_DEG, RobotConfig.THETA2_MAX_DEG)
+                val = np.clip(val, RobotConfig.THETA2_MIN_DEG,
+                              RobotConfig.THETA2_MAX_DEG)
                 slider_theta2.set_val(val)
             except ValueError:
                 pass
@@ -308,7 +338,8 @@ class RobotSimulator:
             """テキストボックス3からの更新"""
             try:
                 val = float(text)
-                val = np.clip(val, RobotConfig.THETA3_MIN_DEG, RobotConfig.THETA3_MAX_DEG)
+                val = np.clip(val, RobotConfig.THETA3_MIN_DEG,
+                              RobotConfig.THETA3_MAX_DEG)
                 slider_theta3.set_val(val)
             except ValueError:
                 pass
@@ -317,7 +348,8 @@ class RobotSimulator:
             """テキストボックス4からの更新"""
             try:
                 val = float(text)
-                val = np.clip(val, RobotConfig.THETA4_MIN_DEG, RobotConfig.THETA4_MAX_DEG)
+                val = np.clip(val, RobotConfig.THETA4_MIN_DEG,
+                              RobotConfig.THETA4_MAX_DEG)
                 slider_theta4.set_val(val)
             except ValueError:
                 pass
@@ -343,18 +375,17 @@ class RobotSimulator:
 
         plt.show()
 
-def inverse_kinematics(px:int, py:int, pz:int, len_1:int, len_2:int):
-    try:
-        RAD2DEG = 180.0 / mt.pi
 
+def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
+    try:
         # XY平面上の距離
-        dxy = mt.sqrt(px*px + py*py)
+        dxy = np.sqrt(px*px + py*py)
         # 目標位置までの3D距離
         pow_reach = px*px + py*py + pz*pz
-        arm_reach = mt.sqrt(pow_reach)
+        arm_reach = np.sqrt(pow_reach)
 
         # ベース回転角（Z軸周り）
-        theta0 = mt.atan2(py, px)
+        theta0 = np.arctan2(py, px)
         # 余弦定理で肘関節の角度を計算
         cos_theta1 = (len_1*len_1 + len_2*len_2 - pow_reach) / (2*len_1*len_2)
         # 範囲チェック
@@ -362,28 +393,35 @@ def inverse_kinematics(px:int, py:int, pz:int, len_1:int, len_2:int):
             print("Target is out of reach! Len:", arm_reach)
             return (0, 0, 0)
         elif abs(cos_theta1) > 1.0:
-            print("Target is out of reach! angle:", mt.acos(cos_theta1) * RAD2DEG)
+            print("Target is out of reach! angle:",
+                  np.degrees(np.arccos(cos_theta1)))
             return (0, 0, 0)
         else:
-            theta2 = mt.pi - mt.acos(cos_theta1)
+            theta2 = np.pi - np.arccos(cos_theta1)
 
             # 角度計算
-            alpha = mt.atan2(pz, dxy)
-            beta = mt.acos((len_1 + len_2*mt.cos(theta2)) / arm_reach)
-            theta1 = mt.pi/2 - (alpha + beta)
+            alpha = np.arctan2(pz, dxy)
+            beta = np.arccos((len_1 + len_2*np.cos(theta2)) / arm_reach)
+            theta1 = np.pi/2 - (alpha + beta)
 
             return (theta0, theta1, theta2)
     except Exception as e:
         print("Inverse Kinematics Error:", e)
         return (0, 0, 0)
 
-if __name__ == "__main__":
-    # ロボットの作成(設定ファイルのパラメータを使用)
-    robot = ThreeAxisRobot()
 
+if __name__ == "__main__":
+    print("ロボットアーム シミュレータ")
+    # ロボットの作成(設定ファイルのパラメータを使用)
+    robot = ThreeAxisRobot(
+        RobotConfig.LINK1_LENGTH,
+        RobotConfig.LINK2_LENGTH,
+        RobotConfig.LINK3_LENGTH
+    )
     # シミュレータの作成
     simulator = RobotSimulator(robot)
 
+    # 逆運動学による計算
     inverse_kinematics_result = inverse_kinematics(
         RobotConfig.TARGET_POINT_X,
         RobotConfig.TARGET_POINT_Y,
@@ -391,8 +429,10 @@ if __name__ == "__main__":
         RobotConfig.LINK1_LENGTH,
         RobotConfig.LINK2_LENGTH + RobotConfig.LINK3_LENGTH
     )
-    print("3軸ロボットアーム シミュレータ")
-    simulator.interactive_control(inverse_kinematics_result[0],
-                                 inverse_kinematics_result[1],
-                                 inverse_kinematics_result[2],
-                                 0.0)
+
+    # インタラクティブ制御の開始
+    simulator.interactive_control(
+        inverse_kinematics_result[0],
+        inverse_kinematics_result[1],
+        inverse_kinematics_result[2],
+        0.0)
