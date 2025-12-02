@@ -41,13 +41,9 @@ if __name__ == "__main__":
     _detail_formatting = "[%(levelname)s] %(asctime)s\t%(message)s"
     vi = None
     try:
-        print("# robot_arm_simulator")
         # ロギングの設定
-        logging.basicConfig(
-            level=logging.INFO,
-            format=_detail_formatting,
-        )
-        logger = logging.getLogger(__name__)
+        logging.basicConfig(level=logging.INFO, format=_detail_formatting)
+        logger = logging.getLogger(parser.prog)
         # 引数の解析
         args = parser.parse_args()
         RS.RobotConfig.TARGET_POINT_X = args.x
@@ -56,6 +52,16 @@ if __name__ == "__main__":
         RS.RobotConfig.LINK1_LENGTH = args.link_len1
         RS.RobotConfig.LINK2_LENGTH = args.link_len2
         RS.RobotConfig.LINK3_LENGTH = args.link_len3
+        # ロボットアームシミュレータ情報の表示
+        logger.info("# robot_arm_simulator")
+        logger.info("Link Lengths: ( "
+                    f"{RS.RobotConfig.LINK1_LENGTH} / "
+                    f"{RS.RobotConfig.LINK2_LENGTH} / "
+                    f"{RS.RobotConfig.LINK3_LENGTH})")
+        logger.info("Target Point: ( "
+                    f"{RS.RobotConfig.TARGET_POINT_X}, "
+                    f"{RS.RobotConfig.TARGET_POINT_Y}, "
+                    f"{RS.RobotConfig.TARGET_POINT_Z})")
 
         # ロボットの作成(設定ファイルのパラメータを使用)
         robot = RS.ThreeAxisRobot(
@@ -65,10 +71,6 @@ if __name__ == "__main__":
 
         # シミュレータの作成
         simulator = RS.RobotSimulator(robot)
-        print("  Target Point: (",
-              RS.RobotConfig.TARGET_POINT_X, ", ",
-              RS.RobotConfig.TARGET_POINT_Y, ", ",
-              RS.RobotConfig.TARGET_POINT_Z, ")")
 
         # 逆運動学による計算
         inverse_kinematics_result = RS.inverse_kinematics(
