@@ -383,13 +383,15 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
         # 目標位置までの3D距離
         pow_reach = px*px + py*py + pz*pz
         arm_reach = np.sqrt(pow_reach)
+        pow_l1 = len_1*len_1
+        pow_l2 = len_2*len_2
 
         # ベース回転角（Z軸周り）
         theta0 = np.arctan2(py, px)
         # 余弦定理で肘関節の角度を計算
-        cos_theta1 = (len_1*len_1 + len_2*len_2 - pow_reach) / (2*len_1*len_2)
+        cos_theta1 = (pow_l1 + pow_l2 - pow_reach) / (2*len_1*len_2)
         # 範囲チェック
-        if arm_reach > (len_1+len_2):
+        if arm_reach > (len_1 + len_2):
             print("[ERROR] Target is out of reach! Len:", arm_reach)
             return (0, 0, 0)
         elif abs(cos_theta1) > 1.0:
@@ -398,7 +400,7 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
         else:
             theta2 = np.pi - np.arccos(cos_theta1)
             if np.isnan(theta2):
-                print("[ERROR] theta2 is NaN:", cos_theta1)
+                print("[ERROR] theta2 is NaN:", theta2)
                 theta2 = 0.0
 
             # 角度計算
@@ -406,14 +408,15 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
             if 0 == arm_reach:
                 beta = 0.0
             else:
-                beta = np.arccos((len_1 + len_2*np.cos(theta2)) / arm_reach)
+                beta = np.arccos(
+                    (pow_reach + pow_l1 - pow_l2) / (2*len_1*arm_reach))
             theta1 = np.pi/2 - (alpha + beta)
 
             if np.isnan(theta0):
+                print("[ERROR] theta0 is NaN:", theta0)
                 theta0 = 0.0
-                print("[ERROR] theta0 is NaN:", cos_theta1)
             if np.isnan(theta1):
-                print("[ERROR] theta1 is NaN:", cos_theta1)
+                print("[ERROR] theta1 is NaN:", theta1)
                 theta1 = 0.0
             return (theta0, theta1, theta2)
     except Exception as e:
