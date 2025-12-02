@@ -397,12 +397,24 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
             return (0, 0, 0)
         else:
             theta2 = np.pi - np.arccos(cos_theta1)
+            if np.isnan(theta2):
+                print("[ERROR] theta2 is NaN:", cos_theta1)
+                theta2 = 0.0
 
             # 角度計算
             alpha = np.arctan2(pz, dxy)
-            beta = np.arccos((len_1 + len_2*np.cos(theta2)) / arm_reach)
+            if 0 == arm_reach:
+                beta = 0.0
+            else:
+                beta = np.arccos((len_1 + len_2*np.cos(theta2)) / arm_reach)
             theta1 = np.pi/2 - (alpha + beta)
 
+            if np.isnan(theta0):
+                theta0 = 0.0
+                print("[ERROR] theta0 is NaN:", cos_theta1)
+            if np.isnan(theta1):
+                print("[ERROR] theta1 is NaN:", cos_theta1)
+                theta1 = 0.0
             return (theta0, theta1, theta2)
     except Exception as e:
         print("[ERROR] Inverse Kinematics Error:", e)
