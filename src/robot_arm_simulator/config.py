@@ -23,7 +23,7 @@ class RobotConfig:
     THETA1_MAX_DEG = 180
 
     # 第2軸(根元モーター: Y軸周り)の角度制限 [度]
-    THETA2_MIN_DEG = -180
+    THETA2_MIN_DEG = 0
     THETA2_MAX_DEG = 180
 
     # 第3軸(関節モーター: Y軸周り)の角度制限 [度]
