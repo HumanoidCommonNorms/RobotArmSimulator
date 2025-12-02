@@ -27,9 +27,9 @@ theta0 = np.arctan2(dy, dx)
 cos_theta1 = (L1*L1 + L2*L2 - pow_reach) / (2*L1*L2)
 # 範囲チェック
 if arm_reach > (L1+L2):
-    print("Target is out of reach! Len:", arm_reach)
+    print("[ERROR] Target is out of reach! Len:", arm_reach)
 elif abs(cos_theta1) > 1.0:
-    print("Target is out of reach! angle:", np.degrees(np.arccos(cos_theta1)))
+    print("[ERROR] Target is out of reach! angle:", cos_theta1)
 else:
     theta2 = np.pi - np.arccos(cos_theta1)
 
@@ -38,6 +38,6 @@ else:
     beta = np.arccos((L1 + L2*np.cos(theta2)) / arm_reach)
     theta1 = np.pi/2 - (alpha + beta)
 
-    print("theta0 = ", np.degrees(theta0))
-    print("theta1 = ", np.degrees(theta1))
-    print("theta2 = ", np.degrees(theta2))
+    print("  theta0 = ", np.degrees(theta0))
+    print("  theta1 = ", np.degrees(theta1))
+    print("  theta2 = ", np.degrees(theta2))

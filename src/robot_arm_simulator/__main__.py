@@ -41,7 +41,7 @@ if __name__ == "__main__":
     _detail_formatting = "[%(levelname)s] %(asctime)s\t%(message)s"
     vi = None
     try:
-        print("ロボットアーム シミュレータ")
+        print("# robot_arm_simulator")
         # ロギングの設定
         logging.basicConfig(
             level=logging.INFO,
@@ -65,8 +65,10 @@ if __name__ == "__main__":
 
         # シミュレータの作成
         simulator = RS.RobotSimulator(robot)
-        print("Target Point: (", RS.RobotConfig.TARGET_POINT_X, ", ",
-              RS.RobotConfig.TARGET_POINT_Y, ", ", RS.RobotConfig.TARGET_POINT_Z, ")")
+        print("  Target Point: (",
+              RS.RobotConfig.TARGET_POINT_X, ", ",
+              RS.RobotConfig.TARGET_POINT_Y, ", ",
+              RS.RobotConfig.TARGET_POINT_Z, ")")
 
         # 逆運動学による計算
         inverse_kinematics_result = RS.inverse_kinematics(

@@ -390,11 +390,10 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
         cos_theta1 = (len_1*len_1 + len_2*len_2 - pow_reach) / (2*len_1*len_2)
         # 範囲チェック
         if arm_reach > (len_1+len_2):
-            print("Target is out of reach! Len:", arm_reach)
+            print("[ERROR] Target is out of reach! Len:", arm_reach)
             return (0, 0, 0)
         elif abs(cos_theta1) > 1.0:
-            print("Target is out of reach! angle:",
-                  np.degrees(np.arccos(cos_theta1)))
+            print("[ERROR] Target is out of reach! angle:", cos_theta1)
             return (0, 0, 0)
         else:
             theta2 = np.pi - np.arccos(cos_theta1)
@@ -406,12 +405,12 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
 
             return (theta0, theta1, theta2)
     except Exception as e:
-        print("Inverse Kinematics Error:", e)
+        print("[ERROR] Inverse Kinematics Error:", e)
         return (0, 0, 0)
 
 
 if __name__ == "__main__":
-    print("ロボットアーム シミュレータ")
+    print("# robot_arm_simulator")
     # ロボットの作成(設定ファイルのパラメータを使用)
     robot = ThreeAxisRobot(
         RobotConfig.LINK1_LENGTH,
