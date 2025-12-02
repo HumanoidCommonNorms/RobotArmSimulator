@@ -28,6 +28,8 @@ python -m pip install --upgrade pip
 
 # pyproject.tomlがあるディレクトリで以下を実行
 pip install -U ./
+# または GitHub から直接インストール
+pip install RobotArmSimulator@git+https://github.com/HumanoidCommonNorms/RobotArmSimulator.git
 
 # インストールされたパッケージの確認
 pip list

@@ -39,6 +39,20 @@
 			"**/.DS_Store": true,
 			".pio": true
 		},
-		"git.detectSubmodules": false
+		"git.detectSubmodules": false,
+		"cSpell.words": [
+			"blit",
+			"borderaxespad",
+			"figsize",
+			"markersize",
+			"valinit",
+			"valstep",
+			"xlabel",
+			"xlim",
+			"ylabel",
+			"ylim",
+			"zlabel",
+			"zlim"
+		]
 	}
 }
