@@ -391,7 +391,10 @@ def inverse_kinematics(px: int, py: int, pz: int, len_1: int, len_2: int):
         # 余弦定理で肘関節の角度を計算
         cos_theta1 = (pow_l1 + pow_l2 - pow_reach) / (2*len_1*len_2)
         # 範囲チェック
-        if arm_reach > (len_1 + len_2):
+        if not ((arm_reach <= (len_1 + len_2)) and (len_1 <= (arm_reach + len_2)) and (len_2 <= (arm_reach + len_1))):
+            # 三角形の成立条件を満たさない場合は到達不可能
+            # 3辺の長さ(a,b,c)が分かっている三角形が存在する必要十分条件は，
+            # a < b + c, b < a + c, c < a + b を満たすこと
             print("[ERROR] Target is out of reach! Len:", arm_reach)
             return (0, 0, 0)
         elif abs(cos_theta1) > 1.0:
